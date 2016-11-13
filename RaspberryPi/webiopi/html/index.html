@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content = "width = 420, user-scalable = no" /> 
+	<title>UNIR, TFM IoT | Main control</title>
+	<script type="text/javascript" src="/webiopi.js"></script>
+	<script type="text/javascript">
+	webiopi().ready(function() {
+		$("#cpuTemp").val('cargando...');
+	
+		//Inicio
+		var buttonCooler = webiopi().createGPIOButton(10, "CPU Cooler");
+		$("#content").append(buttonCooler);
+		
+		var buttonPlug = webiopi().createGPIOButton(26, "Plug");
+		$("#content").append(buttonPlug);
+		
+		var button = webiopi().createMacroButton("reles","Test reles", "testReles", "");
+		$("#content").append(button);
+		
+		webiopi().refreshGPIO(true);
+		callUpdateCpuTemp();
+	});
+	
+	window.setTimeout(callUpdateCpuTemp, 5000);
+	
+	function callUpdateCpuTemp(){
+		webiopi().callMacro("getCPUtemperature",[],updateCpuTemp);
+	}
+	
+	function updateCpuTemp(macro, args, data){
+		$("#cpuTemp").val(data);
+	};
+	
+	
+	</script>
+	<style type="text/css">
+		button {
+            display: block;
+            margin: 5px 5px 5px 5px;
+            width: 200px;
+            height: 45px;
+            font-size: 24pt;
+            font-weight: bold;
+            color: white;
+        }
+      div, h1 {
+      	
+      }
+	</style>
+</head>
+	<body>
+		<h1>Main control</h1>
+		<div id="cpuTempDiv">CPU temperature: <input type="text" id="cpuTemp" size="5" readonly="true"> ºC</div><br/>
+		<div id="content"></div>
+		<a href="RaspberryPiHeader.html" >Raspberry Pi Header List</a>
+	</body>
+</html>
